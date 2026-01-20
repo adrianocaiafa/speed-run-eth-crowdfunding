@@ -75,7 +75,9 @@ contract CrowdFund {
         }
     }
 
-    receive() external payable {}
+    receive() external payable {
+        contribute();
+    }    
 
     ////////////////////////
     /// View Functions /////
