@@ -20,6 +20,9 @@ contract CrowdFund {
 
     FundingRecipient public fundingRecipient;
     bool public openToWithdraw; 
+    uint256 public deadline = block.timestamp + 30 seconds;
+    uint256 public constant threshold = 1 ether;
+    error TooEarly(uint256 deadline, uint256 currentTimestamp);
 
     ////////////////
     /// Events /////
@@ -62,7 +65,15 @@ contract CrowdFund {
         if (!success) revert WithdrawTransferFailed(msg.sender, balance);
     }
 
-    function execute() public {}
+    function execute() public {
+        if (block.timestamp <= deadline) revert TooEarly(deadline, block.timestamp);
+        
+        if (address(this).balance >= threshold) {
+            fundingRecipient.complete{value: address(this).balance}();
+        } else {
+            openToWithdraw = true;
+        }
+    }
 
     receive() external payable {}
 
@@ -71,6 +82,9 @@ contract CrowdFund {
     ////////////////////////
 
     function timeLeft() public view returns (uint256) {
-        return 0;
+        if (block.timestamp >= deadline) {
+            return 0;
+        }
+        return deadline - block.timestamp;
     }
 }

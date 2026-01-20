@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     CrowdFund: {
-      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      address: "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
       abi: [
         {
           inputs: [
@@ -23,6 +23,22 @@ const deployedContracts = {
         {
           inputs: [],
           name: "NotOpenToWithdraw",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "deadline",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "currentTimestamp",
+              type: "uint256",
+            },
+          ],
+          name: "TooEarly",
           type: "error",
         },
         {
@@ -88,6 +104,19 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "deadline",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "execute",
           outputs: [],
           stateMutability: "nonpayable",
@@ -121,6 +150,19 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "threshold",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "timeLeft",
           outputs: [
             {
@@ -145,10 +187,10 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 3181,
+      deployedOnBlock: 4101,
     },
     FundingRecipient: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
       abi: [
         {
           inputs: [],
@@ -172,7 +214,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 1324,
+      deployedOnBlock: 4099,
     },
   },
 } as const;
