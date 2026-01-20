@@ -13,6 +13,7 @@ contract CrowdFund {
 
     error NotOpenToWithdraw();
     error WithdrawTransferFailed(address to, uint256 amount);
+    error AlreadyCompleted(); // Or whatever name you want
 
     //////////////////////
     /// State Variables //
@@ -35,6 +36,7 @@ contract CrowdFund {
     ///////////////////
 
     modifier notCompleted() {
+        if (fundingRecipient.completed()) revert AlreadyCompleted(); 
         _;
     }
 
@@ -50,12 +52,12 @@ contract CrowdFund {
     /// Functions /////
     ///////////////////
 
-    function contribute() public payable {
+    function contribute() public payable notCompleted  {
         balances[msg.sender] += msg.value;
         emit Contribution(msg.sender, msg.value);
     }
 
-    function withdraw() public {
+    function withdraw() public notCompleted {
         if (!openToWithdraw) revert NotOpenToWithdraw();
         
         uint256 balance = balances[msg.sender];
@@ -65,7 +67,7 @@ contract CrowdFund {
         if (!success) revert WithdrawTransferFailed(msg.sender, balance);
     }
 
-    function execute() public {
+    function execute() public notCompleted {
         if (block.timestamp <= deadline) revert TooEarly(deadline, block.timestamp);
         
         if (address(this).balance >= threshold) {
