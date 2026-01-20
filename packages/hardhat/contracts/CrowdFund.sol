@@ -5,6 +5,8 @@ import "hardhat/console.sol";
 import "./FundingRecipient.sol";
 
 contract CrowdFund {
+    mapping(address => uint256) public balances;
+
     /////////////////
     /// Errors //////
     /////////////////
@@ -21,7 +23,7 @@ contract CrowdFund {
     /// Events /////
     ////////////////
 
-    // Events go here...
+    event Contribution(address, uint256);
 
     ///////////////////
     /// Modifiers /////
@@ -43,7 +45,10 @@ contract CrowdFund {
     /// Functions /////
     ///////////////////
 
-    function contribute() public payable {}
+    function contribute() public payable {
+        balances[msg.sender] += msg.value;
+        emit Contribution(msg.sender, msg.value);
+    }
 
     function withdraw() public {}
 
