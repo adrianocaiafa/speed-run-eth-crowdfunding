@@ -11,13 +11,15 @@ contract CrowdFund {
     /// Errors //////
     /////////////////
 
-    // Errors go here...
+    error NotOpenToWithdraw();
+    error WithdrawTransferFailed(address to, uint256 amount);
 
     //////////////////////
     /// State Variables //
     //////////////////////
 
     FundingRecipient public fundingRecipient;
+    bool public openToWithdraw; 
 
     ////////////////
     /// Events /////
@@ -50,7 +52,15 @@ contract CrowdFund {
         emit Contribution(msg.sender, msg.value);
     }
 
-    function withdraw() public {}
+    function withdraw() public {
+        if (!openToWithdraw) revert NotOpenToWithdraw();
+        
+        uint256 balance = balances[msg.sender];
+        balances[msg.sender] = 0;
+        
+        (bool success,) = msg.sender.call{value: balance}("");
+        if (!success) revert WithdrawTransferFailed(msg.sender, balance);
+    }
 
     function execute() public {}
 
